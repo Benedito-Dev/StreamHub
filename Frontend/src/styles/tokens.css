@@ -1,0 +1,216 @@
+/* ===================================================
+   STREAMHUB DESIGN TOKENS — v1.0
+   =================================================== */
+
+:root {
+  /* BRAND */
+  --color-brand-50:  #F0EBFF;
+  --color-brand-100: #DDD0FF;
+  --color-brand-200: #C4ADFF;
+  --color-brand-300: #A07DFF;
+  --color-brand-400: #8B5CF6;
+  --color-brand-500: #7C3AED;
+  --color-brand-600: #6D28D9;
+  --color-brand-700: #5B21B6;
+  --color-brand-800: #4C1D95;
+  --color-brand-900: #2E1065;
+
+  /* ACCENT */
+  --color-accent-50:  #ECFEFF;
+  --color-accent-100: #CFFAFE;
+  --color-accent-200: #A5F3FC;
+  --color-accent-300: #67E8F9;
+  --color-accent-400: #22D3EE;
+  --color-accent-500: #06B6D4;
+  --color-accent-600: #0891B2;
+  --color-accent-700: #0E7490;
+  --color-accent-800: #155E75;
+  --color-accent-900: #164E63;
+
+  /* NEUTRALS */
+  --color-neutral-0:   #FFFFFF;
+  --color-neutral-50:  #F8FAFC;
+  --color-neutral-100: #F1F5F9;
+  --color-neutral-200: #E2E8F0;
+  --color-neutral-300: #CBD5E1;
+  --color-neutral-400: #94A3B8;
+  --color-neutral-500: #64748B;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1E293B;
+  --color-neutral-850: #172033;
+  --color-neutral-900: #0F172A;
+  --color-neutral-950: #080D17;
+
+  /* SEMANTIC — SUCCESS */
+  --color-success-50:  #F0FDF4;
+  --color-success-200: #BBF7D0;
+  --color-success-400: #4ADE80;
+  --color-success-500: #22C55E;
+  --color-success-700: #15803D;
+  --color-success-bg:  #052E16;
+
+  /* SEMANTIC — WARNING */
+  --color-warning-50:  #FFFBEB;
+  --color-warning-200: #FDE68A;
+  --color-warning-400: #FBBF24;
+  --color-warning-500: #F59E0B;
+  --color-warning-700: #B45309;
+  --color-warning-bg:  #1C0A00;
+
+  /* SEMANTIC — ERROR */
+  --color-error-50:  #FFF1F2;
+  --color-error-200: #FECDD3;
+  --color-error-400: #F87171;
+  --color-error-500: #EF4444;
+  --color-error-700: #B91C1C;
+  --color-error-bg:  #1C0000;
+
+  /* SEMANTIC — INFO */
+  --color-info-50:  #EFF6FF;
+  --color-info-200: #BFDBFE;
+  --color-info-400: #60A5FA;
+  --color-info-500: #3B82F6;
+  --color-info-700: #1D4ED8;
+  --color-info-bg:  #0A1628;
+
+  /* PLATFORMS */
+  --color-youtube:              #FF0000;
+  --color-youtube-muted:        rgba(255, 0, 0, 0.15);
+  --color-youtube-text:         #FF6B6B;
+  --color-twitch:               #9147FF;
+  --color-twitch-muted:         rgba(145, 71, 255, 0.15);
+  --color-twitch-text:          #B881FF;
+  --color-kick:                 #53FC18;
+  --color-kick-muted:           rgba(83, 252, 24, 0.15);
+  --color-kick-text:            #7DFF4F;
+  --color-trovo:                #1DC34C;
+  --color-trovo-muted:          rgba(29, 195, 76, 0.15);
+  --color-trovo-text:           #3DDB66;
+  --color-tiktok:               #FF0050;
+  --color-tiktok-muted:         rgba(255, 0, 80, 0.15);
+  --color-tiktok-text:          #FF4D7D;
+  --color-patreon:              #FF424D;
+  --color-patreon-muted:        rgba(255, 66, 77, 0.15);
+  --color-patreon-text:         #FF7A82;
+  --color-kofi:                 #FF5E5B;
+  --color-kofi-muted:           rgba(255, 94, 91, 0.15);
+  --color-kofi-text:            #FF8F8D;
+  --color-streamlabs:           #80F5D2;
+  --color-streamlabs-muted:     rgba(128, 245, 210, 0.15);
+  --color-streamlabs-text:      #80F5D2;
+  --color-streamelements:       #F5A623;
+  --color-streamelements-muted: rgba(245, 166, 35, 0.15);
+  --color-streamelements-text:  #FFC04D;
+
+  /* SEMANTIC ALIASES — DARK MODE */
+  --color-bg-base:        var(--color-neutral-950);
+  --color-bg-subtle:      var(--color-neutral-900);
+  --color-bg-surface:     var(--color-neutral-850);
+  --color-bg-elevated:    var(--color-neutral-800);
+  --color-bg-overlay:     var(--color-neutral-700);
+  --color-border-subtle:  var(--color-neutral-800);
+  --color-border-default: var(--color-neutral-700);
+  --color-border-strong:  var(--color-neutral-600);
+  --color-border-brand:   var(--color-brand-500);
+  --color-text-primary:   var(--color-neutral-50);
+  --color-text-secondary: var(--color-neutral-300);
+  --color-text-muted:     var(--color-neutral-500);
+  --color-text-disabled:  var(--color-neutral-600);
+  --color-text-inverse:   var(--color-neutral-950);
+  --color-text-brand:     var(--color-brand-300);
+
+  /* TYPOGRAPHY */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --text-xs:   0.625rem;
+  --text-sm:   0.75rem;
+  --text-base: 0.875rem;
+  --text-md:   1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.25rem;
+  --text-5xl:  3rem;
+
+  --weight-light:     300;
+  --weight-regular:   400;
+  --weight-medium:    500;
+  --weight-semibold:  600;
+  --weight-bold:      700;
+  --weight-extrabold: 800;
+
+  --leading-none:    1;
+  --leading-tight:   1.25;
+  --leading-snug:    1.375;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.625;
+
+  --tracking-tight:   -0.025em;
+  --tracking-normal:   0em;
+  --tracking-wide:     0.025em;
+  --tracking-wider:    0.05em;
+  --tracking-widest:   0.1em;
+
+  /* SPACING */
+  --space-0:   0px;
+  --space-0-5: 2px;
+  --space-1:   4px;
+  --space-1-5: 6px;
+  --space-2:   8px;
+  --space-2-5: 10px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   20px;
+  --space-6:   24px;
+  --space-7:   28px;
+  --space-8:   32px;
+  --space-9:   36px;
+  --space-10:  40px;
+  --space-12:  48px;
+  --space-14:  56px;
+  --space-16:  64px;
+  --space-20:  80px;
+  --space-24:  96px;
+  --space-32:  128px;
+
+  /* LAYOUT */
+  --sidebar-width-collapsed: 64px;
+  --sidebar-width-expanded:  240px;
+  --topbar-height:           56px;
+  --content-max-width:       1280px;
+
+  /* BORDER RADIUS */
+  --radius-none: 0px;
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   6px;
+  --radius-lg:   8px;
+  --radius-xl:   12px;
+  --radius-2xl:  16px;
+  --radius-3xl:  24px;
+  --radius-full: 9999px;
+
+  /* SHADOWS */
+  --shadow-none:   none;
+  --shadow-sm:     0 1px 2px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.04);
+  --shadow-md:     0 4px 6px rgba(0,0,0,.5), 0 1px 3px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.06);
+  --shadow-lg:     0 10px 15px rgba(0,0,0,.6), 0 4px 6px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.08);
+  --shadow-xl:     0 20px 25px rgba(0,0,0,.7), 0 8px 10px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08);
+  --shadow-brand:  0 0 0 1px var(--color-brand-500), 0 0 12px rgba(139,92,246,.3);
+  --shadow-accent: 0 0 0 1px var(--color-accent-400), 0 0 16px rgba(34,211,238,.25);
+  --shadow-error:  0 0 0 1px var(--color-error-500), 0 0 8px rgba(239,68,68,.25);
+
+  /* MOTION */
+  --duration-instant: 50ms;
+  --duration-fast:    100ms;
+  --duration-normal:  200ms;
+  --duration-slow:    300ms;
+  --duration-slower:  500ms;
+  --easing-default:   cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-out:       cubic-bezier(0, 0, 0.2, 1);
+  --easing-in:        cubic-bezier(0.4, 0, 1, 1);
+  --easing-spring:    cubic-bezier(0.34, 1.56, 0.64, 1);
+}
