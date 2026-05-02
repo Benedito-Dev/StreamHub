@@ -1,1 +1,1 @@
-// Public API for the growth feature
+export { GrowthScreen } from './components/GrowthScreen'

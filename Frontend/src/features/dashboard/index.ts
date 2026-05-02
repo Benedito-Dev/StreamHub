@@ -1,1 +1,1 @@
-// Public API for the dashboard feature
+export { DashboardScreen } from './components/DashboardScreen'

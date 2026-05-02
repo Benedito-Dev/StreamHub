@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>StreamHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+/* ===== STREAMHUB DESIGN TOKENS ===== */
+:root {
+  --color-brand-50:#F0EBFF;--color-brand-100:#DDD0FF;--color-brand-200:#C4ADFF;
+  --color-brand-300:#A07DFF;--color-brand-400:#8B5CF6;--color-brand-500:#7C3AED;
+  --color-brand-600:#6D28D9;--color-brand-700:#5B21B6;--color-brand-800:#4C1D95;
+  --color-brand-900:#2E1065;
+  --color-accent-400:#22D3EE;--color-accent-500:#06B6D4;
+  --color-neutral-0:#FFFFFF;--color-neutral-50:#F8FAFC;--color-neutral-100:#F1F5F9;
+  --color-neutral-200:#E2E8F0;--color-neutral-300:#CBD5E1;--color-neutral-400:#94A3B8;
+  --color-neutral-500:#64748B;--color-neutral-600:#475569;--color-neutral-700:#334155;
+  --color-neutral-800:#1E293B;--color-neutral-850:#172033;--color-neutral-900:#0F172A;
+  --color-neutral-950:#080D17;
+  --color-success-400:#4ADE80;--color-success-500:#22C55E;--color-success-bg:#052E16;
+  --color-warning-400:#FBBF24;--color-warning-500:#F59E0B;--color-warning-bg:#1C0A00;
+  --color-error-400:#F87171;--color-error-500:#EF4444;--color-error-bg:#1C0000;
+  --color-info-400:#60A5FA;--color-info-500:#3B82F6;--color-info-bg:#0A1628;
+  --color-youtube:#FF0000;--color-youtube-muted:rgba(255,0,0,0.12);--color-youtube-text:#FF6B6B;
+  --color-twitch:#9147FF;--color-twitch-muted:rgba(145,71,255,0.12);--color-twitch-text:#B881FF;
+  --color-kick:#53FC18;--color-kick-muted:rgba(83,252,24,0.12);--color-kick-text:#7DFF4F;
+  --color-trovo:#1DC34C;--color-trovo-muted:rgba(29,195,76,0.12);--color-trovo-text:#3DDB66;
+  --color-bg-base:var(--color-neutral-950);
+  --color-bg-subtle:var(--color-neutral-900);
+  --color-bg-surface:var(--color-neutral-850);
+  --color-bg-elevated:var(--color-neutral-800);
+  --color-bg-overlay:var(--color-neutral-700);
+  --color-border-subtle:var(--color-neutral-800);
+  --color-border-default:var(--color-neutral-700);
+  --color-border-strong:var(--color-neutral-600);
+  --color-border-brand:var(--color-brand-500);
+  --color-text-primary:var(--color-neutral-50);
+  --color-text-secondary:var(--color-neutral-300);
+  --color-text-muted:var(--color-neutral-500);
+  --color-text-brand:var(--color-brand-300);
+  --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-mono:'JetBrains Mono','Fira Code',monospace;
+  --text-xs:0.625rem;--text-sm:0.75rem;--text-base:0.875rem;--text-md:1rem;
+  --text-lg:1.125rem;--text-xl:1.25rem;--text-2xl:1.5rem;--text-3xl:1.875rem;
+  --text-4xl:2.25rem;--text-5xl:3rem;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;
+  --space-6:24px;--space-7:28px;--space-8:32px;--space-10:40px;--space-12:48px;
+  --sidebar-width-collapsed:64px;--sidebar-width-expanded:240px;--topbar-height:56px;
+  --radius-sm:4px;--radius-md:6px;--radius-lg:8px;--radius-xl:12px;--radius-2xl:16px;--radius-full:9999px;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.04);
+  --shadow-md:0 4px 6px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.6),0 4px 6px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.08);
+  --shadow-brand:0 0 0 1px var(--color-brand-500),0 0 12px rgba(139,92,246,.3);
+  --shadow-accent:0 0 0 1px var(--color-accent-400),0 0 16px rgba(34,211,238,.25);
+  --duration-fast:100ms;--duration-normal:200ms;--duration-slow:300ms;
+  --easing-default:cubic-bezier(0.4,0,0.2,1);--easing-spring:cubic-bezier(0.34,1.56,0.64,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body,#root{height:100%;width:100%;overflow:hidden;}
+body{font-family:var(--font-sans);background:var(--color-bg-base);color:var(--color-text-primary);font-size:var(--text-base);line-height:1.5;-webkit-font-smoothing:antialiased;}
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--color-neutral-700);border-radius:var(--radius-full);}
+/* Pulse animation */
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+@keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+@keyframes slideInRight{from{transform:translateX(100%);opacity:0;}to{transform:translateX(0);opacity:1;}}
+@keyframes countUp{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback, useMemo } = React;
+const { useTweaks, TweaksPanel, TweakSection, TweakToggle, TweakRadio, TweakSelect } = window;
+
+/* ─── CONSTANTS ─── */
+const PLATFORMS = {
+  twitch:  { name:'Twitch',  color:'#9147FF', muted:'rgba(145,71,255,0.12)', text:'#B881FF', icon:'T' },
+  youtube: { name:'YouTube', color:'#FF0000', muted:'rgba(255,0,0,0.12)',    text:'#FF6B6B', icon:'Y' },
+  kick:    { name:'Kick',    color:'#53FC18', muted:'rgba(83,252,24,0.12)',   text:'#7DFF4F', icon:'K' },
+  trovo:   { name:'Trovo',   color:'#1DC34C', muted:'rgba(29,195,76,0.12)',   text:'#3DDB66', icon:'Tv'},
+};
+
+/* ─── PLATFORM ICON SVGs ─── */
+function PlatformIcon({ platform, size = 20 }) {
+  const p = PLATFORMS[platform];
+  const icons = {
+    twitch: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill={p.color}>
+        <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/>
+      </svg>
+    ),
+    youtube: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill={p.color}>
+        <path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
+      </svg>
+    ),
+    kick: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill={p.color}>
+        <path d="M3 2h4v8l5-8h5l-6 10 6 10h-5L7 14v8H3z"/>
+      </svg>
+    ),
+    trovo: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill={p.color}>
+        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 3l3 5h-6l3-5zm-5 7h10l-5 8-5-8z"/>
+      </svg>
+    ),
+  };
+  return icons[platform] || <span style={{fontSize:size*.6,color:p.color}}>{p.icon}</span>;
+}
+
+/* ─── MOCK DATA ─── */
+function generateViewerHistory(base, variance, points = 60) {
+  const data = [];
+  let v = base;
+  for (let i = 0; i < points; i++) {
+    v = Math.max(0, v + (Math.random() - 0.48) * variance);
+    data.push(Math.round(v));
+  }
+  return data;
+}
+
+function generateGrowthData(base, days = 30) {
+  const data = [];
+  let total = base;
+  for (let i = 0; i < days; i++) {
+    const delta = Math.round((Math.random() - 0.35) * 80 + 40);
+    total += delta;
+    data.push({ day: i, value: total, delta });
+  }
+  return data;
+}
+
+const MOCK = {
+  viewers: { twitch: 845, youtube: 312, kick: 90, trovo: 47 },
+  followers: { twitch: 48320, youtube: 31200, kick: 8940, trovo: 2100 },
+  followerGrowth7d: { twitch: 1203, youtube: 842, kick: 158, trovo: 44 },
+  score: 87,
+  liveStart: Date.now() - 83 * 60 * 1000,
+  viewerHistory: {
+    twitch: generateViewerHistory(845, 60),
+    youtube: generateViewerHistory(312, 30),
+    kick: generateViewerHistory(90, 15),
+    trovo: generateViewerHistory(47, 8),
+  },
+  growthData: {
+    twitch: generateGrowthData(48320),
+    youtube: generateGrowthData(31200),
+    kick: generateGrowthData(8940),
+    trovo: generateGrowthData(2100),
+  },
+  insights: [
+    { id:1, type:'positive', icon:'📈', title:'Sábado às 20h é seu pico', desc:'Seu pico de viewers nas últimas 4 semanas aconteceu às 20h nas sextas e sábados. Média 34% acima do habitual.', metric:'+34%', platform:'twitch' },
+    { id:2, type:'info', icon:'⚡', title:'YouTube crescendo rápido', desc:'Crescimento no YouTube acelerou 2.1× esta semana comparado à semana passada.', metric:'+112%', platform:'youtube' },
+    { id:3, type:'warning', icon:'⚠', title:'Kick precisa de atenção', desc:'O engajamento no Kick caiu 18% nos últimos 7 dias. Considere aumentar a frequência.', metric:'-18%', platform:'kick' },
+  ],
+  recentLives: [
+    { id:1, date:'28 abr', platforms:['twitch','youtube'], duration:'3h 22m', peak:1247, newFollowers:312, score:91 },
+    { id:2, date:'26 abr', platforms:['twitch','youtube','kick'], duration:'2h 48m', peak:998, newFollowers:218, score:84 },
+    { id:3, date:'24 abr', platforms:['twitch'], duration:'4h 10m', peak:876, newFollowers:187, score:79 },
+    { id:4, date:'22 abr', platforms:['twitch','youtube'], duration:'2h 05m', peak:743, newFollowers:142, score:76 },
+    { id:5, date:'19 abr', platforms:['twitch','kick','trovo'], duration:'3h 55m', peak:1102, newFollowers:289, score:88 },
+  ],
+  chatActivity: { twitch: 48, youtube: 22, kick: 11, trovo: 4 },
+  newFollowersLive: { twitch: 87, youtube: 34, kick: 9, trovo: 2 },
+};
+
+/* ─── UTILITY ─── */
+function fmtNum(n) {
+  if (n >= 1000000) return (n/1000000).toFixed(1)+'M';
+  if (n >= 1000) return (n/1000).toFixed(1)+'K';
+  return n.toLocaleString('pt-BR');
+}
+function fmtDelta(n, showSign = true) {
+  const sign = n >= 0 ? '+' : '';
+  return `${showSign ? sign : ''}${n.toLocaleString('pt-BR')}`;
+}
+function fmtTime(ms) {
+  const s = Math.floor(ms / 1000);
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+}
+
+/* ─── ANIMATED NUMBER ─── */
+function AnimatedNumber({ value, format = fmtNum, duration = 600 }) {
+  const [display, setDisplay] = useState(value);
+  const prev = useRef(value);
+  const raf = useRef(null);
+  useEffect(() => {
+    const start = prev.current;
+    const end = value;
+    const startTime = performance.now();
+    const animate = (now) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplay(Math.round(start + (end - start) * eased));
+      if (progress < 1) raf.current = requestAnimationFrame(animate);
+      else prev.current = end;
+    };
+    raf.current = requestAnimationFrame(animate);
+    return () => raf.current && cancelAnimationFrame(raf.current);
+  }, [value, duration]);
+  return <span>{format(display)}</span>;
+}
+
+/* ─── SPARKLINE ─── */
+function Sparkline({ data, color = '#8B5CF6', height = 36, width = 80 }) {
+  if (!data || data.length < 2) return null;
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const range = max - min || 1;
+  const pts = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * width;
+    const y = height - ((v - min) / range) * height;
+    return `${x},${y}`;
+  }).join(' ');
+  const areaPath = `M0,${height} L${pts.split(' ').map(p => p).join(' L')} L${width},${height} Z`;
+  return (
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{overflow:'visible'}}>
+      <defs>
+        <linearGradient id={`sg-${color.replace('#','')}`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity="0.2"/>
+          <stop offset="100%" stopColor={color} stopOpacity="0"/>
+        </linearGradient>
+      </defs>
+      <path d={areaPath} fill={`url(#sg-${color.replace('#','')})`}/>
+      <polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
+/* ─── LINE CHART ─── */
+function LineChart({ series, height = 200, showGrid = true, showLabels = true }) {
+  const width = 600;
+  const padL = 48, padR = 16, padT = 16, padB = showLabels ? 32 : 8;
+  const chartW = width - padL - padR;
+  const chartH = height - padT - padB;
+
+  const allVals = series.flatMap(s => s.data);
+  const min = Math.floor(Math.min(...allVals) * 0.95);
+  const max = Math.ceil(Math.max(...allVals) * 1.05);
+  const range = max - min || 1;
+
+  const toX = (i, len) => padL + (i / (len - 1)) * chartW;
+  const toY = (v) => padT + chartH - ((v - min) / range) * chartH;
+
+  const gridLines = 4;
+  return (
+    <svg viewBox={`0 0 ${width} ${height}`} style={{width:'100%',height:'100%'}} preserveAspectRatio="none">
+      <defs>
+        {series.map(s => (
+          <linearGradient key={s.id} id={`lg-${s.id}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={s.color} stopOpacity="0.15"/>
+            <stop offset="100%" stopColor={s.color} stopOpacity="0"/>
+          </linearGradient>
+        ))}
+      </defs>
+      {showGrid && Array.from({length: gridLines + 1}, (_, i) => {
+        const v = min + (range / gridLines) * i;
+        const y = toY(v);
+        return (
+          <g key={i}>
+            <line x1={padL} y1={y} x2={width - padR} y2={y} stroke="rgba(255,255,255,0.06)" strokeWidth="1"/>
+            {showLabels && <text x={padL - 6} y={y + 4} textAnchor="end" fontSize="9" fill="var(--color-text-muted)" fontFamily="var(--font-mono)">{fmtNum(Math.round(v))}</text>}
+          </g>
+        );
+      })}
+      {series.map(s => {
+        const pts = s.data.map((v, i) => `${toX(i, s.data.length)},${toY(v)}`);
+        const areaD = `M${padL},${padT + chartH} L${pts.join(' L')} L${width - padR},${padT + chartH} Z`;
+        const lineD = `M${pts.join(' L')}`;
+        return (
+          <g key={s.id}>
+            <path d={areaD} fill={`url(#lg-${s.id})`}/>
+            <path d={lineD} fill="none" stroke={s.color} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round"
+              strokeDasharray={s.dashed ? '6 3' : undefined}/>
+            {/* Last dot */}
+            <circle cx={toX(s.data.length - 1, s.data.length)} cy={toY(s.data[s.data.length-1])} r="3" fill={s.color}/>
+          </g>
+        );
+      })}
+      {showLabels && (() => {
+        const labelCount = 7;
+        return Array.from({length: labelCount}, (_, i) => {
+          const idx = Math.floor(i * (series[0].data.length - 1) / (labelCount - 1));
+          const x = toX(idx, series[0].data.length);
+          const label = `${30 - Math.floor(idx / series[0].data.length * 29)}d`;
+          return <text key={i} x={x} y={height - 4} textAnchor="middle" fontSize="9" fill="var(--color-text-muted)" fontFamily="var(--font-mono)">{label}</text>;
+        });
+      })()}
+    </svg>
+  );
+}
+
+/* ─── BAR CHART ─── */
+function BarChart({ data, height = 160 }) {
+  const max = Math.max(...data.map(d => d.value));
+  return (
+    <div style={{ display:'flex', alignItems:'flex-end', gap:8, height, padding:'8px 0' }}>
+      {data.map((d, i) => (
+        <div key={i} style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', gap:4, height:'100%', justifyContent:'flex-end' }}>
+          <span style={{ fontFamily:'var(--font-mono)', fontSize:'var(--text-xs)', color:'var(--color-text-muted)' }}>{fmtNum(d.value)}</span>
+          <div style={{
+            width:'100%', borderRadius:'var(--radius-sm) var(--radius-sm) 0 0',
+            background: `linear-gradient(to top, ${d.color}, ${d.color}99)`,
+            height: `${(d.value / max) * (height - 40)}px`,
+            transition:'height 0.4s var(--easing-spring)',
+            boxShadow: `0 0 8px ${d.color}40`,
+          }}/>
+          <span style={{ fontSize:'var(--text-xs)', color:'var(--color-text-muted)', whiteSpace:'nowrap' }}>{d.label}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ─── HEATMAP ─── */
+function Heatmap() {
+  const days = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const hours = [14,15,16,17,18,19,20,21,22,23];
+  const data = days.map(() => hours.map(() => Math.random()));
+  data[0][6] = 0.95; data[6][6] = 0.88; data[6][5] = 0.82; data[5][6] = 0.79;
+  return (
+    <div style={{ overflowX:'auto' }}>
+      <div style={{ display:'grid', gridTemplateColumns:`40px repeat(${hours.length}, 1fr)`, gap:3, minWidth:400 }}>
+        <div/>
+        {hours.map(h => (
+          <div key={h} style={{ fontSize:'var(--text-xs)', color:'var(--color-text-muted)', textAlign:'center', fontFamily:'var(--font-mono)', paddingBottom:4 }}>{h}h</div>
+        ))}
+        {days.map((day, di) => (
+          <React.Fragment key={day}>
+            <div style={{ fontSize:'var(--text-xs)', color:'var(--color-text-muted)', display:'flex', alignItems:'center', paddingRight:4 }}>{day}</div>
+            {hours.map((h, hi) => {
+              const v = data[di][hi];
+              const alpha = v * 0.9 + 0.05;
+              return (
+                <div key={h} style={{
+                  aspectRatio:'1',
+                  borderRadius:'var(--radius-sm)',
+                  background: v > 0.7 ? `rgba(139,92,246,${alpha})` : `rgba(34,211,238,${alpha * 0.6})`,
+                  cursor:'pointer',
+                  transition:'transform 0.1s',
+                }} title={`${day} ${h}h — ${Math.round(v*100)}% performance`}
+                onMouseEnter={e => e.target.style.transform='scale(1.15)'}
+                onMouseLeave={e => e.target.style.transform='scale(1)'}
+                />
+              );
+            })}
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── LIVE INDICATOR ─── */
+function LiveBadge({ size = 'md' }) {
+  const sz = size === 'sm' ? { pad:'2px 8px', dot:6, fs:'var(--text-xs)' } : { pad:'4px 12px', dot:8, fs:'var(--text-sm)' };
+  return (
+    <span style={{
+      display:'inline-flex', alignItems:'center', gap:6,
+      background:'rgba(239,68,68,0.15)', border:'1px solid rgba(239,68,68,0.3)',
+      borderRadius:'var(--radius-full)', padding:sz.pad,
+      fontSize:sz.fs, fontWeight:600, color:'#F87171',
+      letterSpacing:'0.05em',
+    }}>
+      <span style={{ width:sz.dot, height:sz.dot, borderRadius:'50%', background:'#EF4444', animation:'blink 1.2s ease-in-out infinite', flexShrink:0 }}/>
+      AO VIVO
+    </span>
+  );
+}
+
+/* ─── SCORE RING ─── */
+function ScoreRing({ score, size = 64 }) {
+  const r = size * 0.38;
+  const circ = 2 * Math.PI * r;
+  const offset = circ * (1 - score / 100);
+  const color = score >= 80 ? '#8B5CF6' : score >= 60 ? '#22D3EE' : '#FBBF24';
+  return (
+    <div style={{ position:'relative', width:size, height:size, flexShrink:0 }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform:'rotate(-90deg)' }}>
+        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="var(--color-bg-elevated)" strokeWidth={size*.1}/>
+        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={size*.1}
+          strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round"
+          style={{ transition:'stroke-dashoffset 0.8s var(--easing-default)' }}/>
+      </svg>
+      <div style={{ position:'absolute', inset:0, display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column' }}>
+        <span style={{ fontFamily:'var(--font-mono)', fontSize:size*.22, fontWeight:700, color, lineHeight:1 }}>{score}</span>
+        <span style={{ fontSize:size*.12, color:'var(--color-text-muted)', lineHeight:1.2 }}>score</span>
+      </div>
+    </div>
+  );
+}
+
+/* ─── METRIC CARD ─── */
+function MetricCard({ label, value, delta, deltaLabel, platform, sparkData, loading, icon, size='md' }) {
+  const p = platform ? PLATFORMS[platform] : null;
+  return (
+    <div style={{
+      background:'var(--color-bg-surface)', border:'1px solid var(--color-border-default)',
+      borderRadius:'var(--radius-xl)', padding:'var(--space-5)',
+      boxShadow:'var(--shadow-sm)', display:'flex', flexDirection:'column', gap:12,
+      transition:'border-color 0.2s, box-shadow 0.2s', cursor:'default',
+      minWidth:0,
+    }}
+    onMouseEnter={e => { e.currentTarget.style.borderColor='var(--color-border-strong)'; e.currentTarget.style.boxShadow='var(--shadow-md)'; }}
+    onMouseLeave={e => { e.currentTarget.style.borderColor='var(--color-border-default)'; e.currentTarget.style.boxShadow='var(--shadow-sm)'; }}
+    >
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+        <span style={{ fontSize:'var(--text-xs)', fontWeight:600, letterSpacing:'0.08em', textTransform:'uppercase', color:'var(--color-text-muted)' }}>{label}</span>
+        {p && <div style={{ background:p.muted, borderRadius:'var(--radius-sm)', padding:'2px 4px' }}><PlatformIcon platform={platform} size={14}/></div>}
+        {icon && !p && <span style={{ fontSize:18, opacity:0.7 }}>{icon}</span>}
+      </div>
+      <div style={{ display:'flex', alignItems:'flex-end', justifyContent:'space-between', gap:8 }}>
+        <div>
+          <div style={{ fontFamily:'var(--font-mono)', fontSize: size==='lg'?'var(--text-4xl)':size==='sm'?'var(--text-xl)':'var(--text-3xl)', fontWeight:700, lineHeight:1, color:'var(--color-text-primary)', fontVariantNumeric:'tabular-nums' }}>
+            {loading ? <div style={{ width:80, height:28, borderRadius:'var(--radius-sm)', background:'var(--color-bg-elevated)', animation:'shimmer 1.5s infinite', backgroundSize:'200% 100%', backgroundImage:'linear-gradient(90deg, var(--color-bg-elevated) 0%, var(--color-neutral-700) 50%, var(--color-bg-elevated) 100%)' }}/> : <AnimatedNumber value={typeof value === 'number' ? value : 0} />}
+          </div>
+          {delta !== undefined && (
+            <div style={{ display:'flex', alignItems:'center', gap:4, marginTop:4 }}>
+              <span style={{ fontSize:'var(--text-xs)', fontWeight:600, color: delta >= 0 ? 'var(--color-success-500)' : 'var(--color-error-500)', fontFamily:'var(--font-mono)' }}>
+                {delta >= 0 ? '▲' : '▼'} {Math.abs(delta).toLocaleString('pt-BR')}
+              </span>
+              {deltaLabel && <span style={{ fontSize:'var(--text-xs)', color:'var(--color-text-muted)' }}>{deltaLabel}</span>}
+            </div>
+          )}
+        </div>
+        {sparkData && <Sparkline data={sparkData} color={p ? p.color : '#8B5CF6'} height={36} width={70}/>}
+      </div>
+    </div>
+  );
+}
+
+/* ─── PLATFORM CARD ─── */
+function PlatformCard({ platform, isLive, viewers, followers, growth7d, onSelect }) {
+  const p = PLATFORMS[platform];
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div style={{
+      background:'var(--color-bg-surface)', border:`1px solid var(--color-border-default)`,
+      borderLeft:`3px solid ${p.color}`,
+      borderRadius:'var(--radius-xl)', padding:'var(--space-5)',
+      boxShadow: hovered ? 'var(--shadow-md)' : 'var(--shadow-sm)',
+      cursor:'pointer', transition:'all 0.2s var(--easing-default)',
+      transform: hovered ? 'translateY(-1px)' : 'none',
+    }}
+    onMouseEnter={() => setHovered(true)}
+    onMouseLeave={() => setHovered(false)}
+    onClick={() => onSelect && onSelect(platform)}
+    >
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:12 }}>
+        <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+          <div style={{ width:28, height:28, borderRadius:'var(--radius-md)', background:p.muted, display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <PlatformIcon platform={platform} size={16}/>
+          </div>
+          <span style={{ fontWeight:600, fontSize:'var(--text-md)' }}>{p.name}</span>
+        </div>
+        {isLive ? <LiveBadge size="sm"/> : <span style={{ fontSize:'var(--text-xs)', color:'var(--color-text-muted)', background:'var(--color-bg-elevated)', padding:'2px 8px', borderRadius:'var(--radius-full)', border:'1px solid var(--color-border-default)' }}>Offline</span>}
+      </div>
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
+        <div>
+          <div style={{ fontSize:'var(--text-xs)', color:'var(--color-text-muted)', marginBottom:2 }}>Seguidores</div>
+          <div style={{ fontFamily:'var(--font-mono)', fontWeight:600, fontSize:'var(--text-lg)', color:'var(--color-text-primary)' }}>{fmtNum(followers)}</div>
+        </div>
+        <div>
+          <div style={{ fontSize:'var(--text-xs)', color:'var(--color-text-muted)', marginBottom:2 }}>Viewers agora</div>
+          <div style={{ fontFamily:'var(--font-mono)', fontWeight:600, fontSize:'var(--text-lg)', color: isLive ? p.text : 'var(--color-text-muted)' }}>{isLive ? fmtNum(viewers) : '—'}</div>
+        </div>
+        <div>
+          <div style={{ fontSize:'var(--text-xs)', color:'var(--color-text-muted)', marginBottom:2 }}>Crescimento 7d</div>
+          <div style={{ fontFamily:'var(--font-mono)', fontWeight:600, fontSize:'var(--text-base)', color:'var(--color-success-500)' }}>+{fmtNum(growth7d)}</div>
+        </div>
+        <div>
+          <Sparkline data={MOCK.viewerHistory[platform].slice(-20)} color={p.color} height={28} width={60}/>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── INSIGHT CARD ─── */
+function InsightCard({ insight }) {
+  const colors = {
+    positive: { border:'var(--color-success-500)', bg:'rgba(34,197,94,0.06)', text:'var(--color-success-500)' },
+    warning:  { border:'var(--color-warning-500)', bg:'rgba(245,158,11,0.06)', text:'var(--color-warning-500)' },
+    info:     { border:'var(--color-info-500)',    bg:'rgba(59,130,246,0.06)', text:'var(--color-info-500)' },
+  };
+  const c = colors[insight.type] || colors.info;
+  const p = PLATFORMS[insight.platform];
+  return (
+    <div style={{
+      background:'var(--color-bg-surface)', border:`1px solid var(--color-border-default)`,
+      borderTop:`2px solid ${c.border}`,
+      borderRadius:'var(--radius-xl)', padding:'var(--space-5)',
+      boxShadow:'var(--shadow-sm)',
+    }}>
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:8 }}>
+        <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+          <span style={{ fontSize:18 }}>{insight.icon}</span>
+          <span style={{ fontWeight:600, fontSize:'var(--text-md)' }}>{insight.title}</span>
+        </div>
+        <span style={{ fontFamily:'var(--font-mono)', fontSize:'var(--text-sm)', fontWeight:700, color:c.text, background:c.bg, padding:'2px 8px', borderRadius:'var(--radius-full)', border:`1px solid ${c.border}40`, whiteSpace:'nowrap' }}>{insight.metric}</span>
+      </div>
+      <p style={{ fontSize:'var(--text-sm)', color:'var(--color-text-secondary)', lineHeight:1.5, marginBottom:10 }}>{insight.desc}</p>
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+        {p && <div style={{ display:'flex', alignItems:'center', gap:4, background:p.muted, padding:'2px 8px', borderRadius:'var(--radius-full)' }}>
+          <PlatformIcon platform={insight.platform} size={10}/>
+          <span style={{ fontSize:'var(--text-xs)', color:p.text, fontWeight:600 }}>{p.name}</span>
+        </div>}
+        <button style={{ background:'none', border:'none', color:'var(--color-text-brand)', fontSize:'var(--text-sm)', fontWeight:500, cursor:'pointer', padding:0, fontFamily:'var(--font-sans)' }}>Ver detalhes →</button>
+      </div>
+    </div>
+  );
+}
+
+/* ─── SIDEBAR ─── */
+function Sidebar({ expanded, onToggle, activeScreen, onNavigate, connectedPlatforms }) {
+  const navItems = [
+    { id:'dashboard', icon:<DashboardIcon/>, label:'Dashboard' },
+    { id:'live', icon:<LiveIcon/>, label:'Live' },
+    { id:'crescimento', icon:<GrowthIcon/>, label:'Crescimento' },
+    { id:'insights', icon:<InsightsIcon/>, label:'Insights' },
+  ];
+  const w = expanded ? 'var(--sidebar-width-expanded)' : 'var(--sidebar-width-collapsed)';
+  return (
+    <aside style={{
+      width:w, minWidth:w, maxWidth:w,
+      height:'100%', background:'var(--color-bg-subtle)',
+      borderRight:'1px solid var(--color-border-subtle)',
+      display:'flex', flexDirection:'column',
+      transition:'width 0.25s var(--easing-default), min-width 0.25s, max-width 0.25s',
+      overflow:'hidden', flexShrink:0, zIndex:10,
+    }}>
+      {/* Logo */}
+      <div style={{ height:'var(--topbar-height)', display:'flex', alignItems:'center', padding: expanded ? '0 16px' : '0', justifyContent: expanded ? 'flex-start' : 'center', borderBottom:'1px solid var(--color-border-subtle)', flexShrink:0 }}>
+        <div style={{ display:'flex', alignItems:'center', gap:10, minWidth:0 }}>
+          <div style={{ width:32, height:32, borderRadius:'var(--radius-lg)', background:'linear-gradient(135deg, #7C3AED, #22D3EE)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="3" fill="white"/>
+              <circle cx="9" cy="9" r="6" stroke="white" strokeWidth="1.5" strokeDasharray="3 2"/>
+              <circle cx="9" cy="9" r="8.5" stroke="white" strokeWidth="0.5" strokeOpacity="0.4"/>
+            </svg>
+          </div>
+          {expanded && <span style={{ fontWeight:800, fontSize:'var(--text-lg)', letterSpacing:'-0.02em', whiteSpace:'nowrap', overflow:'hidden' }}>StreamHub</span>}
+        </div>
+      </div>
+      {/* Nav */}
+      <nav style={{ flex:1, padding:'var(--space-3) var(--space-2)', display:'flex', flexDirection:'column', gap:2, overflowY:'auto', overflowX:'hidden' }}>
+        {expanded && <div style={{ fontSize:'var(--text-xs)', fontWeight:600, letterSpacing:'0.1em', textTransform:'uppercase', color:'var(--color-text-muted)', padding:'8px 10px 4px', whiteSpace:'nowrap' }}>Principal</div>}
+        {navItems.map(item => {
+          const active = activeScreen === item.id;
+          return (
+            <button key={item.id} onClick={() => onNavigate(item.id)} style={{
+              display:'flex', alignItems:'center', gap:10,
+              padding: expanded ? '8px 10px' : '8px',
+              borderRadius:'var(--radius-md)', border:'none', cursor:'pointer',
+              background: active ? 'rgba(139,92,246,0.12)' : 'none',
+              color: active ? 'var(--color-brand-400)' : 'var(--color-text-secondary)',
+              fontWeight: active ? 600 : 400,
+              fontSize:'var(--text-base)', fontFamily:'var(--font-sans)',
+              width:'100%', textAlign:'left', justifyContent: expanded ? 'flex-start' : 'center',
+              transition:'all 0.15s',
+              whiteSpace:'nowrap', overflow:'hidden',
+            }}
+            onMouseEnter={e => { if(!active) { e.currentTarget.style.background='var(--color-bg-overlay)'; e.currentTarget.style.color='var(--color-text-primary)'; }}}
+            onMouseLeave={e => { if(!active) { e.currentTarget.style.background='none'; e.currentTarget.style.color='var(--color-text-secondary)'; }}}
+            >
+              <span style={{ flexShrink:0, color:'inherit' }}>{item.icon}</span>
+              {expanded && <span style={{ overflow:'hidden', textOverflow:'ellipsis' }}>{item.label}</span>}
+              {item.id === 'live' && <span style={{ marginLeft:'auto', width:6, height:6, borderRadius:'50%', background:'#EF4444', animation:'pulse 1.5s infinite', flexShrink:0 }}/>}
+            </button>
+          );
+        })}
+        {expanded && <div style={{ fontSize:'var(--text-xs)', fontWeight:600, letterSpacing:'0.1em', textTransform:'uppercase', color:'var(--color-text-muted)', padding:'16px 10px 4px', whiteSpace:'nowrap' }}>Plataformas</div>}
+        {!expanded && <div style={{ height:8 }}/>}
+        {connectedPlatforms.map(plat => {
+          const p = PLATFORMS[plat];
+          return (
+            <button key={plat} onClick={() => onNavigate('dashboard')} style={{
+              display:'flex', alignItems:'center', gap:10,
+              padding: expanded ? '7px 10px' : '7px',
+              borderRadius:'var(--radius-md)', border:'none', cursor:'pointer',
+              background:'none', color:'var(--color-text-secondary)',
+              fontSize:'var(--text-base)', fontFamily:'var(--font-sans)',
+              width:'100%', textAlign:'left', justifyContent: expanded ? 'flex-start' : 'center',
+              transition:'all 0.15s', whiteSpace:'nowrap', overflow:'hidden',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background='var(--color-bg-overlay)'; e.currentTarget.style.color='var(--color-text-primary)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background='none'; e.currentTarget.style.color='var(--color-text-secondary)'; }}
+            >
+              <span style={{ flexShrink:0 }}><PlatformIcon platform={plat} size={16}/></span>
+              {expanded && <span style={{ overflow:'hidden', textOverflow:'ellipsis', color:'var(--color-text-secondary)' }}>{p.name}</span>}
+            </button>
+          );
+        })}
+      </nav>
+      {/* Footer */}
+      <div style={{ borderTop:'1px solid var(--color-border-subtle)', padding:'var(--space-3) var(--space-2)', display:'flex', flexDirection:'column', gap:4 }}>
+        <button style={{ display:'flex', alignItems:'center', gap:10, padding: expanded ? '7px 10px' : '7px', borderRadius:'var(--radius-md)', border:'none', cursor:'pointer', background:'none', color:'var(--color-text-secondary)', fontSize:'var(--text-base)', fontFamily:'var(--font-sans)', width:'100%', justifyContent: expanded ? 'flex-start' : 'center', transition:'all 0.15s' }}
+          onMouseEnter={e => { e.currentTarget.style.background='var(--color-bg-overlay)'; e.currentTarget.style.color='var(--color-text-primary)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background='none'; e.currentTarget.style.color='var(--color-text-secondary)'; }}>
+          <SettingsIcon/>
+          {expanded && <span>Configurações</span>}
+        </button>
+        {expanded && (
+          <div style={{ display:'flex', alignItems:'center', gap:8, padding:'6px 10px' }}>
+            <div style={{ width:28, height:28, borderRadius:'50%', background:'linear-gradient(135deg, #8B5CF6, #22D3EE)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:12, fontWeight:700, flexShrink:0 }}>SH</div>
+            <div style={{ flex:1, minWidth:0 }}>
+              <div style={{ fontSize:'var(--text-sm)', fontWeight:600, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>StreamerXPro</div>
+              <div style={{ fontSize:'var(--text-xs)', color:'var(--color-brand-300)', fontWeight:500 }}>Pro</div>
+            </div>
+          </div>
+        )}
+        <button onClick={onToggle} style={{ display:'flex', alignItems:'center', justifyContent: expanded ? 'flex-end' : 'center', padding:'6px 10px', borderRadius:'var(--radius-md)', border:'none', cursor:'pointer', background:'none', color:'var(--color-text-muted)', transition:'color 0.15s' }}
+          onMouseEnter={e => e.currentTarget.style.color='var(--color-text-primary)'}
+          onMouseLeave={e => e.currentTarget.style.color='var(--color-text-muted)'}>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            {expanded ? <path d="M10 3L5 8l5 5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/> : <path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>}
+          </svg>
+        </button>
+      </div>
+    </aside>
+  );
+}
+
+/* ─── ICON COMPONENTS ─── */
+function DashboardIcon() {
+  return <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="11" y="1" width="6" height="6" rx="1"/><rect x="1" y="11" width="6" height="6" rx="1"/><rect x="11" y="11" width="6" height="6" rx="1"/></svg>;
+}
+function LiveIcon() {
+  return <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="9" r="3"/><path d="M3.5 3.5a7.78 7.78 0 0 0 0 11M14.5 3.5a7.78 7.78 0 0 1 0 11"/><path d="M6 6a4.24 4.24 0 0 0 0 6M12 6a4.24 4.24 0 0 1 0 6"/></svg>;
+}
+function GrowthIcon() {
+  return <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="1 13 6 8 10 11 17 4"/><polyline points="12 4 17 4 17 9"/></svg>;
+}
+function InsightsIcon() {
+  return <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="7" r="4"/><path d="M7 11.5V16M11 11.5V16M6 16h6"/></svg>;
+}
+function SettingsIcon() {
+  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="8" cy="8" r="2.5"/><path d="M8 1.5v1M8 13.5v1M1.5 8h1M13.5 8h1M3.4 3.4l.7.7M11.9 11.9l.7.7M3.4 12.6l.7-.7M11.9 4.1l.7-.7"/></svg>;
+}
+function BellIcon() {
+  return <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 1.5a5.5 5.5 0 0 1 5.5 5.5c0 3 1.5 4.5 1.5 4.5H2s1.5-1.5 1.5-4.5A5.5 5.5 0 0 1 9 1.5Z"/><path d="M7.5 13.5a1.5 1.5 0 0 0 3 0"/></svg>;
+}
+function RefreshIcon() {
+  return <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12.5 2.5A6 6 0 1 0 13 8"/><polyline points="9 2.5 12.5 2.5 12.5 6"/></svg>;
+}
+
+/* ─── TOPBAR ─── */
+function Topbar({ title, lastUpdate, onRefresh, isLive }) {
+  return (
+    <header style={{
+      height:'var(--topbar-height)', background:'var(--color-bg-subtle)',
+      borderBottom:'1px solid var(--color-border-subtle)',
+      display:'flex', alignItems:'center', padding:'0 var(--space-6)',
+      gap:'var(--space-4)', flexShrink:0, position:'sticky', top:0, zIndex:50,
+    }}>
+      <div style={{ flex:1, display:'flex', alignItems:'center', gap:12 }}>
+        <h1 style={{ fontSize:'var(--text-xl)', fontWeight:700, letterSpacing:'-0.02em' }}>{title}</h1>
+        {isLive && <LiveBadge size="sm"/>}
+      </div>
+      <span style={{ fontSize:'var(--text-xs)', color:'var(--color-text-muted)', fontFamily:'var(--font-mono)' }}>
+        Atualizado {lastUpdate}
+      </span>
+      <button onClick={onRefresh} style={{ display:'flex', alignItems:'center', gap:6, padding:'6px 12px', borderRadius:'var(--radius-md)', border:'1px solid var(--color-border-default)', background:'var(--color-bg-elevated)', color:'var(--color-text-secondary)', cursor:'pointer', fontSize:'var(--text-sm)', fontFamily:'var(--font-sans)', transition:'all 0.15s' }}
+        onMouseEnter={e => { e.currentTarget.style.borderColor='var(--color-border-strong)'; e.currentTarget.style.color='var(--color-text-primary)'; }}
+        onMouseLeave={e => { e.currentTarget.style.borderColor='var(--color-border-default)'; e.currentTarget.style.color='var(--color-text-secondary)'; }}>
+        <RefreshIcon/> Atualizar
+      </button>
+      <button style={{ position:'relative', width:36, height:36, borderRadius:'var(--radius-md)', border:'1px solid var(--color-border-default)', background:'var(--color-bg-elevated)', color:'var(--color-text-secondary)', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
+        <BellIcon/>
+        <span style={{ position:'absolute', top:4, right:4, width:8, height:8, borderRadius:'50%', background:'var(--color-error-500)', border:'2px solid var(--color-bg-subtle)' }}/>
+      </button>
+      <div style={{ width:32, height:32, borderRadius:'50%', background:'linear-gradient(135deg, #8B5CF6, #22D3EE)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:13, fontWeight:700, cursor:'pointer' }}>SH</div>
+    </header>
+  );
+}
+
+/* ─── PERIOD SELECTOR ─── */
+function PeriodSelector({ value, onChange }) {
+  const opts = ['24h','7d','30d','3m','1a'];
+  return (
+    <div style={{ display:'flex', gap:2, background:'var(--color-bg-elevated)', borderRadius:'var(--radius-lg)', padding:3, border:'1px solid var(--color-border-default)' }}>
+      {opts.map(o => (
+        <button key={o} onClick={() => onChange(o)} style={{
+          padding:'4px 10px', borderRadius:'var(--radius-md)', border:'none', cursor:'pointer',
+          fontFamily:'var(--font-mono)', fontSize:'var(--text-xs)', fontWeight:600,
+          background: value === o ? 'var(--color-brand-500)' : 'none',
+          color: value === o ? '#fff' : 'var(--color-text-muted)',
+          transition:'all 0.15s',
+        }}>{o}</button>
+      ))}
+    </div>
+  );
+}
+
+/* ─── DASHBOARD SCREEN ─── */
+function DashboardScreen({ isLive, connectedPlatforms }) {
+  const [period, setPeriod] = useState('30d');
+  const totalViewers = connectedPlatforms.reduce((s, p) => s + (isLive ? MOCK.viewers[p] : 0), 0);
+  const totalFollowers = connectedPlatforms.reduce((s, p) => s + MOCK.followers[p], 0);
+  const totalGrowth = connectedPlatforms.reduce((s, p) => s + MOCK.followerGrowth7d[p], 0);
+
+  const growthSeries = connectedPlatforms.map(plat => ({
+    id: plat, color: PLATFORMS[plat].color,
+    data: MOCK.growthData[plat].map(d => d.value),
+  }));
+
+  return (
+    <div style={{ flex:1, overflowY:'auto', display:'flex', flexDirection:'column' }}>
+      <div style={{ padding:'var(--space-6)', display:'flex', flexDirection:'column', gap:'var(--space-6)' }}>
+        {/* Hero metrics */}
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:'var(--space-4)' }}>
+          <MetricCard label="Viewers Agora" value={totalViewers} delta={isLive ? 47 : undefined} deltaLabel="desde ontem" size="md"/>
+          <MetricCard label="Total Seguidores" value={totalFollowers} delta={totalGrowth} deltaLabel="em 7 dias" size="md"/>
+          <MetricCard label="Crescimento 7d" value={totalGrowth} delta={Math.round(totalGrowth * 0.184)} deltaLabel="vs semana ant." size="md"/>
+          <div style={{ background:'var(--color-bg-surface)', border:'1px solid var(--color-border-default)', borderRadius:'var(--radius-xl)', padding:'var(--space-5)', boxShadow:'var(--shadow-sm)', display:'flex', alignItems:'center', gap:16 }}>
+            <ScoreRing score={MOCK.score} size={70}/>
+            <div>
+              <div style={{ fontSize:'var(--text-xs)', fontWeight:600, letterSpacing:'0.08em', textTransform:'uppercase', color:'var(--color-text-muted)', marginBottom:4 }}>StreamHub Score</div>
+              <div style={{ fontSize:'var(--text-sm)', color:'var(--color-text-secondary)', lineHeight:1.4 }}>Excelente performance esta semana</div>
+              <div style={{ fontSize:'var(--text-xs)', color:'var(--color-success-500)', marginTop:4, fontFamily:'var(--font-mono)' }}>▲ +3 pontos</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Live now */}
+        {isLive && (
+          <div>
+            <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:12 }}>
+              <LiveBadge/>
+              <h2 style={{ fontSize:'var(--text-lg)', fontWeight:600 }}>Transmitindo agora</h2>
+            </div>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(180px, 1fr))', gap:'var(--space-3)' }}>
+              {connectedPlatforms.map(plat => (
+                <MetricCard key={plat} label={`${PLATFORMS[plat].name} Viewers`} value={MOCK.viewers[plat]} platform={plat} sparkData={MOCK.viewerHistory[plat].slice(-20)} size="sm"/>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Platform cards */}
+        <div>
+          <h2 style={{ fontSize:'var(--text-lg)', fontWeight:600, marginBottom:12 }}>Plataformas</h2>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(220px, 1fr))', gap:'var(--space-4)' }}>
+            {connectedPlatforms.map(plat => (
+              <PlatformCard key={plat} platform={plat} isLive={isLive} viewers={MOCK.viewers[plat]} followers={MOCK.followers[plat]} growth7d={MOCK.followerGrowth7d[plat]}/>
+            ))}
+          </div>
+        </div>
+
+        {/* Growth chart */}
+        <div style={{ background:'var(--color-bg-surface)', border:'1px solid var(--color-border-default)', borderRadius:'var(--radius-xl)', padding:'var(--space-5)', boxShadow:'var(--shadow-sm)' }}>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
+            <div>
+              <h2 style={{ fontSize:'var(--text-xl)', fontWeight:600 }}>Evolução de Seguidores</h2>
+              <p style={{ fontSize:'var(--text-sm)', color:'var(--color-text-muted)', marginTop:2 }}>Crescimento consolidado por plataforma</p>
+            </div>
+            <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+              <div style={{ display:'flex', gap:12 }}>
+                {connectedPlatforms.map(plat => (
+                  <div key={plat} style={{ display:'flex', alignItems:'center', gap:4 }}>
+                    <div style={{ width:8, height:2, borderRadius:1, background:PLATFORMS[plat].color }}/>
+                    <span style={{ fontSize:'var(--text-xs)', color:'var(--color-text-muted)' }}>{PLATFORMS[plat].name}</span>
+                  </div>
+                ))}
+              </div>
+              <PeriodSelector value={period} onChange={setPeriod}/>
+            </div>
+          </div>
+          <div style={{ height:220 }}>
+            <LineChart series={growthSeries} height={200} showGrid showLabels/>
+          </div>
+        </div>
+
+        {/* Insights */}
+        <div>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:12 }}>
+            <h2 style={{ fontSize:'var(--text-lg)', fontWeight:600 }}>Insights Recentes</h2>
+            <button style={{ background:'none', border:'none', color:'var(--color-text-brand)', fontSize:'var(--text-sm)', fontWeight:500, cursor:'pointer', fontFamily:'var(--font-sans)' }}>Ver todos →</button>
+          </div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:'var(--space-4)' }}>
+            {MOCK.insights.map(ins => <InsightCard key={ins.id} insight={ins}/>)}
+          </div>
+        </div>
+
+        {/* Recent lives */}
+        <div style={{ background:'var(--color-bg-surface)', border:'1px solid var(--color-border-default)', borderRadius:'var(--radius-xl)', overflow:'hidden', boxShadow:'var(--shadow-sm)' }}>
+          <div style={{ padding:'var(--space-5)', borderBottom:'1px solid var(--color-border-subtle)', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+            <h2 style={{ fontSize:'var(--text-xl)', fontWeight:600 }}>Lives Recentes</h2>
+            <button style={{ background:'none', border:'none', color:'var(--color-text-brand)', fontSize:'var(--text-sm)', fontWeight:500, cursor:'pointer', fontFamily:'var(--font-sans)' }}>Ver histórico →</button>
+          </div>
+          <table style={{ width:'100%', borderCollapse:'collapse' }}>
+            <thead>
+              <tr style={{ background:'var(--color-bg-elevated)' }}>
+                {['Data','Plataformas','Duração','Pico Viewers','Novos Segs','Score'].map(h => (
+                  <th key={h} style={{ padding:'10px 20px', textAlign:'left', fontSize:'var(--text-xs)', fontWeight:600, letterSpacing:'0.06em', textTransform:'uppercase', color:'var(--color-text-muted)', borderBottom:'1px solid var(--color-border-subtle)' }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {MOCK.recentLives.map((live, i) => (
+                <tr key={live.id} style={{ borderBottom: i < MOCK.recentLives.length-1 ? '1px solid var(--color-border-subtle)' : 'none', cursor:'pointer', transition:'background 0.1s' }}
+                  onMouseEnter={e => e.currentTarget.style.background='var(--color-bg-elevated)'}
+                  onMouseLeave={e => e.currentTarget.style.background='none'}>
+                  <td style={{ padding:'12px 20px', fontFamily:'var(--font-mono)', fontSize:'var(--text-sm)', color:'var(--color-text-secondary)' }}>{live.date}</td>
+                  <td style={{ padding:'12px 20px' }}>
+                    <div style={{ display:'flex', gap:4 }}>
+                      {live.platforms.map(p => <div key={p} style={{ width:18, height:18, borderRadius:'var(--radius-sm)', background:PLATFORMS[p].muted, display:'flex', alignItems:'center', justifyContent:'center' }}><PlatformIcon platform={p} size={10}/></div>)}
+                    </div>
+                  </td>
+                  <td style={{ padding:'12px 20px', fontFamily:'var(--font-mono)', fontSize:'var(--text-sm)', color:'var(--color-text-secondary)' }}>{live.duration}</td>
+                  <td style={{ padding:'12px 20px', fontFamily:'var(--font-mono)', fontSize:'var(--text-sm)', fontWeight:600, color:'var(--color-text-primary)' }}>{fmtNum(live.peak)}</td>
+                  <td style={{ padding:'12px 20px', fontFamily:'var(--font-mono)', fontSize:'var(--text-sm)', color:'var(--color-success-500)' }}>+{live.newFollowers}</td>
+                  <td style={{ padding:'12px 20px' }}>
+                    <span style={{ fontFamily:'var(--font-mono)', fontSize:'var(--text-sm)', fontWeight:700, color: live.score >= 85 ? 'var(--color-brand-400)' : live.score >= 75 ? 'var(--color-accent-400)' : 'var(--color-text-secondary)', background: live.score >= 85 ? 'rgba(139,92,246,0.1)' : 'var(--color-bg-elevated)', padding:'2px 8px', borderRadius:'var(--radius-full)' }}>{live.score}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── LIVE SCREEN ─── */
+function LiveScreen({ isLive, connectedPlatforms }) {
+  const [liveViewers, setLiveViewers] = useState({...MOCK.viewers});
+  const [elapsed, setElapsed] = useState(Date.now() - MOCK.liveStart);
+  const [newFollowers, setNewFollowers] = useState({...MOCK.newFollowersLive});
+  const [peakViewers, setPeakViewers] = useState(1247);
+  const [rtData, setRtData] = useState(() => {
+    const base = {};
+    connectedPlatforms.forEach(p => { base[p] = [...MOCK.viewerHistory[p].slice(-30)]; });
+    return base;
+  });
+
+  useEffect(() => {
+    if (!isLive) return;
+    const interval = setInterval(() => {
+      setElapsed(Date.now() - MOCK.liveStart);
+      setLiveViewers(prev => {
+        const next = {};
+        connectedPlatforms.forEach(p => {
+          next[p] = Math.max(0, prev[p] + Math.round((Math.random() - 0.45) * 20));
+        });
+        return next;
+      });
+      setRtData(prev => {
+        const next = {};
+        connectedPlatforms.forEach(p => {
+          const newVal = Math.max(0, (prev[p][prev[p].length-1] || 0) + Math.round((Math.random() - 0.45) * 20));
+          next[p] = [...prev[p].slice(-59), newVal];
+        });
+        return next;
+      });
+      setNewFollowers(prev => {
+        const next = {...prev};
+        connectedPlatforms.forEach(p => {
+          if (Math.random() < 0.3) next[p] = prev[p] + 1;
+        });
+        return next;
+      });
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [isLive, connectedPlatforms]);
+
+  const totalViewers = connectedPlatforms.reduce((s, p) => s + (isLive ? liveViewers[p] : 0), 0);
+  const totalNewFollowers = connectedPlatforms.reduce((s, p) => s + newFollowers[p], 0);
+
+  const rtSeries = connectedPlatforms.map(plat => ({
+    id: plat, color: PLATFORMS[plat].color,
+    data: rtData[plat] || [],
+  }));
+
+  if (!isLive) {
+    return (
+      <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', gap:16 }}>
+        <div style={{ width:64, height:64, borderRadius:'50%', background:'var(--color-bg-elevated)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <LiveIcon/>
+        </div>
+        <div style={{ textAlign:'center' }}>
+          <h2 style={{ fontSize:'var(--text-2xl)', fontWeight:700, marginBottom:8 }}>Nenhuma live em andamento</h2>
+          <p style={{ fontSize:'var(--text-base)', color:'var(--color-text-muted)', marginBottom:20 }}>Quando você começar uma transmissão, os dados aparecerão aqui em tempo real.</p>
+          <button style={{ padding:'10px 24px', borderRadius:'var(--radius-lg)', border:'1px solid var(--color-border-brand)', background:'rgba(124,58,237,0.1)', color:'var(--color-brand-300)', cursor:'pointer', fontFamily:'var(--font-sans)', fontSize:'var(--text-base)', fontWeight:600 }}>Ver Histórico de Lives</button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ flex:1, overflowY:'auto' }}>
+      <div style={{ padding:'var(--space-6)', display:'flex', flexDirection:'column', gap:'var(--space-6)' }}>
+        {/* Hero live stats */}
+        <div style={{ background:'var(--color-bg-surface)', border:'1px solid var(--color-border-default)', borderRadius:'var(--radius-2xl)', padding:'var(--space-6)', boxShadow:'var(--shadow-accent)', position:'relative', overflow:'hidden' }}>
+          <div style={{ position:'absolute', inset:0, background:'linear-gradient(135deg, rgba(34,211,238,0.04) 0%, rgba(139,92,246,0.04) 100%)', pointerEvents:'none' }}/>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'var(--space-5)', position:'relative' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+              <LiveBadge/>
+              <span style={{ fontFamily:'var(--font-mono)', fontSize:'var(--text-lg)', color:'var(--color-text-muted)' }}>{fmtTime(elapsed)}</span>
+            </div>
+            <div style={{ display:'flex', alignItems:'center', gap:8, fontSize:'var(--text-sm)', color:'var(--color-text-muted)' }}>
+              <span>Pico:</span>
+              <span style={{ fontFamily:'var(--font-mono)', fontWeight:700, color:'var(--color-accent-400)' }}>{fmtNum(peakViewers)}</span>
+            </div>
+          </div>
+          <div style={{ display:'grid', gridTemplateColumns:'auto 1fr', gap:'var(--space-8)', alignItems:'center' }}>
+            <div>
+              <div style={{ fontSize:'var(--text-xs)', fontWeight:600, letterSpacing:'0.08em', textTransform:'uppercase', color:'var(--color-text-muted)', marginBottom:6 }}>Viewers Totais</div>
+              <div style={{ fontFamily:'var(--font-mono)', fontSize:'var(--text-5xl)', fontWeight:700, lineHeight:1, color:'var(--color-text-primary)', fontVariantNumeric:'tabular-nums', textShadow:'0 0 30px rgba(139,92,246,0.3)' }}>
+                <AnimatedNumber value={totalViewers} duration={800}/>
+              </div>
+              <div style={{ marginTop:8, display:'flex', gap:16 }}>
+                {connectedPlatforms.map(plat => (
+                  <div key={plat} style={{ display:'flex', alignItems:'center', gap:6 }}>
+                    <PlatformIcon platform={plat} size={12}/>
+                    <span style={{ fontFamily:'var(--font-mono)', fontSize:'var(--text-sm)', color:PLATFORMS[plat].text, fontWeight:600 }}>
+                      <AnimatedNumber value={liveViewers[plat]} duration={600}/>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:'var(--space-3)' }}>
+              <div style={{ background:'var(--color-bg-elevated)', borderRadius:'var(--radius-lg)', padding:'var(--space-4)', textAlign:'center' }}>
+                <div style={{ fontSize:'var(--text-xs)', color:'var(--color-text-muted)', marginBottom:4 }}>Novos Seguidores</div>
+                <div style={{ fontFamily:'var(--font-mono)', fontSize:'var(--text-3xl)', fontWeight:700, color:'var(--color-success-500)' }}>+<AnimatedNumber value={totalNewFollowers}/></div>
+              </div>
+              <div style={{ background:'var(--color-bg-elevated)', borderRadius:'var(--radius-lg)', padding:'var(--space-4)', textAlign:'center' }}>
+                <div style={{ fontSize:'var(--text-xs)', color:'var(--color-text-muted)', marginBottom:4 }}>Msgs/min chat</div>
+                <div style={{ fontFamily:'var(--font-mono)', fontSize:'var(--text-3xl)', fontWeight:700, color:'var(--color-accent-400)' }}>
+                  <AnimatedNumber value={connectedPlatforms.reduce((s,p) => s + MOCK.chatActivity[p], 0)}/>
+                </div>
+              </div>
+              <div style={{ background:'var(--color-bg-elevated)', borderRadius:'var(--radius-lg)', padding:'var(--space-4)', textAlign:'center' }}>
+                <div style={{ fontSize:'var(--text-xs)', color:'var(--color-text-muted)', marginBottom:4 }}>vs live anterior</div>
+                <div style={{ fontFamily:'var(--font-mono)', fontSize:'var(--text-3xl)', fontWeight:700, color:'var(--color-brand-400)' }}>+23%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Realtime chart */}
+        <div style={{ background:'var(--color-bg-surface)', border:'1px solid var(--color-border-default)', borderRadius:'var(--radius-xl)', padding:'var(--space-5)', boxShadow:'var(--shadow-sm)' }}>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
+            <div>
+              <h2 style={{ fontSize:'var(--text-xl)', fontWeight:600 }}>Viewers em Tempo Real</h2>
+              <p style={{ fontSize:'var(--text-sm)', color:'var(--color-text-muted)', marginTop:2 }}>Últimos 60 minutos · Atualiza a cada 2s</p>
+            </div>
+            <div style={{ display:'flex', gap:12 }}>
+              {connectedPlatforms.map(plat => (
+                <div key={plat} style={{ display:'flex', alignItems:'center', gap:4 }}>
+                  <div style={{ width:8, height:2, borderRadius:1, background:PLATFORMS[plat].color }}/>
+                  <span style={{ fontSize:'var(--text-xs)', color:'var(--color-text-muted)' }}>{PLATFORMS[plat].name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ height:200 }}>
+            <LineChart series={rtSeries} height={200} showGrid showLabels={false}/>
+          </div>
+        </div>
+
+        {/* Chat + per platform */}
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'var(--space-4)' }}>
+          {/* Chat activity */}
+          <div style={{ background:'var(--color-bg-surface)', border:'1px solid var(--color-border-default)', borderRadius:'var(--radius-xl)', padding:'var(--space-5)' }}>
+            <h3 style={{ fontSize:'var(--text-md)', fontWeight:600, marginBottom:16 }}>Atividade do Chat</h3>
+            <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+              {connectedPlatforms.map(plat => {
+                const p = PLATFORMS[plat];
+                const v = MOCK.chatActivity[plat];
+                const max = Math.max(...connectedPlatforms.map(pp => MOCK.chatActivity[pp]));
+                return (
+                  <div key={plat} style={{ display:'flex', alignItems:'center', gap:10 }}>
+                    <div style={{ width:20, display:'flex', justifyContent:'center' }}><PlatformIcon platform={plat} size={14}/></div>
+                    <div style={{ flex:1, height:6, borderRadius:'var(--radius-full)', background:'var(--color-bg-elevated)', overflow:'hidden' }}>
+                      <div style={{ height:'100%', width:`${(v/max)*100}%`, background:p.color, borderRadius:'var(--radius-full)', boxShadow:`0 0 6px ${p.color}60`, transition:'width 0.5s var(--easing-spring)' }}/>
+                    </div>
+                    <span style={{ fontFamily:'var(--font-mono)', fontSize:'var(--text-sm)', color:p.text, fontWeight:600, minWidth:40, textAlign:'right' }}>{v} msg/m</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          {/* New followers per platform */}
+          <div style={{ background:'var(--color-bg-surface)', border:'1px solid var(--color-border-default)', borderRadius:'var(--radius-xl)', padding:'var(--space-5)' }}>
+            <h3 style={{ fontSize:'var(--text-md)', fontWeight:600, marginBottom:16 }}>Novos Seguidores na Live</h3>
+            <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
+              {connectedPlatforms.map(plat => {
+                const p = PLATFORMS[plat];
+                return (
+                  <div key={plat} style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+                    <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                      <div style={{ width:24, height:24, borderRadius:'var(--radius-md)', background:p.muted, display:'flex', alignItems:'center', justifyContent:'center' }}>
+                        <PlatformIcon platform={plat} size={13}/>
+                      </div>
+                      <span style={{ fontSize:'var(--text-sm)', color:'var(--color-text-secondary)' }}>{p.name}</span>
+                    </div>
+                    <span style={{ fontFamily:'var(--font-mono)', fontSize:'var(--text-xl)', fontWeight:700, color:'var(--color-success-500)' }}>+<AnimatedNumber value={newFollowers[plat]}/></span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── GROWTH SCREEN ─── */
+function CrescimentoScreen({ connectedPlatforms }) {
+  const [period, setPeriod] = useState('30d');
+  const [activePlatforms, setActivePlatforms] = useState(connectedPlatforms);
+
+  const togglePlatform = (plat) => {
+    setActivePlatforms(prev => prev.includes(plat) ? prev.filter(p => p !== plat) : [...prev, plat]);
+  };
+
+  const growthSeries = activePlatforms.map(plat => ({
+    id: plat, color: PLATFORMS[plat].color,
+    data: MOCK.growthData[plat].map(d => d.value),
+  }));
+
+  const barData = connectedPlatforms.map(plat => ({
+    label: PLATFORMS[plat].name,
+    value: MOCK.followerGrowth7d[plat],
+    color: PLATFORMS[plat].color,
+  }));
+
+  const totalCurrent = connectedPlatforms.reduce((s, p) => s + MOCK.followers[p], 0);
+  const totalGrowth = connectedPlatforms.reduce((s, p) => s + MOCK.followerGrowth7d[p], 0);
+
+  return (
+    <div style={{ flex:1, overflowY:'auto' }}>
+      <div style={{ padding:'var(--space-6)', display:'flex', flexDirection:'column', gap:'var(--space-6)' }}>
+        {/* Top metrics */}
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:'var(--space-4)' }}>
+          <MetricCard label="Total de Seguidores" value={totalCurrent} size="md"/>
+          <MetricCard label="Crescimento no Período" value={totalGrowth} delta={214} deltaLabel="vs período ant." size="md"/>
+          <div style={{ background:'var(--color-bg-surface)', border:'1px solid var(--color-border-default)', borderRadius:'var(--radius-xl)', padding:'var(--space-5)', display:'flex', alignItems:'center', gap:12 }}>
+            <div style={{ width:36, height:36, borderRadius:'var(--radius-lg)', background:PLATFORMS[connectedPlatforms[0]].muted, display:'flex', alignItems:'center', justifyContent:'center' }}>
+              <PlatformIcon platform={connectedPlatforms[0]} size={20}/>
+            </div>
+            <div>
+              <div style={{ fontSize:'var(--text-xs)', fontWeight:600, letterSpacing:'0.08em', textTransform:'uppercase', color:'var(--color-text-muted)', marginBottom:2 }}>Maior Crescimento</div>
+              <div style={{ fontSize:'var(--text-md)', fontWeight:700 }}>{PLATFORMS[connectedPlatforms[0]].name}</div>
+              <div style={{ fontSize:'var(--text-sm)', color:'var(--color-success-500)', fontFamily:'var(--font-mono)', fontWeight:600 }}>+{fmtNum(MOCK.followerGrowth7d[connectedPlatforms[0]])} em 7d</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Main chart with platform filter */}
+        <div style={{ background:'var(--color-bg-surface)', border:'1px solid var(--color-border-default)', borderRadius:'var(--radius-xl)', padding:'var(--space-5)', boxShadow:'var(--shadow-sm)' }}>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:16 }}>
+            <div>
+              <h2 style={{ fontSize:'var(--text-xl)', fontWeight:600 }}>Evolução de Seguidores</h2>
+              <p style={{ fontSize:'var(--text-sm)', color:'var(--color-text-muted)', marginTop:2 }}>Total acumulado por plataforma</p>
+            </div>
+            <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+              <div style={{ display:'flex', gap:4 }}>
+                {connectedPlatforms.map(plat => {
+                  const active = activePlatforms.includes(plat);
+                  const p = PLATFORMS[plat];
+                  return (
+                    <button key={plat} onClick={() => togglePlatform(plat)} style={{
+                      display:'flex', alignItems:'center', gap:5,
+                      padding:'4px 10px', borderRadius:'var(--radius-full)',
+                      border:`1px solid ${active ? p.color + '60' : 'var(--color-border-default)'}`,
+                      background: active ? p.muted : 'none',
+                      cursor:'pointer', transition:'all 0.15s',
+                      opacity: active ? 1 : 0.5,
+                    }}>
+                      <PlatformIcon platform={plat} size={11}/>
+                      <span style={{ fontSize:'var(--text-xs)', fontWeight:600, color: active ? p.text : 'var(--color-text-muted)' }}>{p.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              <PeriodSelector value={period} onChange={setPeriod}/>
+            </div>
+          </div>
+          <div style={{ height:240 }}>
+            {growthSeries.length > 0 ? <LineChart series={growthSeries} height={220} showGrid showLabels/> : (
+              <div style={{ height:'100%', display:'flex', alignItems:'center', justifyContent:'center', color:'var(--color-text-muted)' }}>Selecione pelo menos uma plataforma</div>
+            )}
+          </div>
+        </div>
+
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'var(--space-4)' }}>
+          {/* Bar chart */}
+          <div style={{ background:'var(--color-bg-surface)', border:'1px solid var(--color-border-default)', borderRadius:'var(--radius-xl)', padding:'var(--space-5)', boxShadow:'var(--shadow-sm)' }}>
+            <div style={{ marginBottom:16 }}>
+              <h3 style={{ fontSize:'var(--text-lg)', fontWeight:600 }}>Crescimento por Plataforma</h3>
+              <p style={{ fontSize:'var(--text-sm)', color:'var(--color-text-muted)', marginTop:2 }}>Novos seguidores em 7 dias</p>
+            </div>
+            <BarChart data={barData} height={160}/>
+          </div>
+
+          {/* Heatmap */}
+          <div style={{ background:'var(--color-bg-surface)', border:'1px solid var(--color-border-default)', borderRadius:'var(--radius-xl)', padding:'var(--space-5)', boxShadow:'var(--shadow-sm)' }}>
+            <div style={{ marginBottom:14 }}>
+              <h3 style={{ fontSize:'var(--text-lg)', fontWeight:600 }}>Melhores Horários</h3>
+              <p style={{ fontSize:'var(--text-sm)', color:'var(--color-text-muted)', marginTop:2 }}>Performance por dia × hora</p>
+            </div>
+            <Heatmap/>
+            <div style={{ display:'flex', gap:12, marginTop:12, alignItems:'center' }}>
+              <span style={{ fontSize:'var(--text-xs)', color:'var(--color-text-muted)' }}>Menor</span>
+              <div style={{ flex:1, height:4, borderRadius:'var(--radius-full)', background:'linear-gradient(to right, rgba(34,211,238,0.1), rgba(139,92,246,0.9))' }}/>
+              <span style={{ fontSize:'var(--text-xs)', color:'var(--color-text-muted)' }}>Maior</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Per-platform delta cards */}
+        <div>
+          <h2 style={{ fontSize:'var(--text-lg)', fontWeight:600, marginBottom:12 }}>Detalhamento por Plataforma</h2>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px, 1fr))', gap:'var(--space-4)' }}>
+            {connectedPlatforms.map(plat => {
+              const p = PLATFORMS[plat];
+              const pct = ((MOCK.followerGrowth7d[plat] / MOCK.followers[plat]) * 100).toFixed(2);
+              return (
+                <div key={plat} style={{ background:'var(--color-bg-surface)', border:'1px solid var(--color-border-default)', borderRadius:'var(--radius-xl)', padding:'var(--space-5)', boxShadow:'var(--shadow-sm)' }}>
+                  <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:12 }}>
+                    <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                      <div style={{ width:24, height:24, borderRadius:'var(--radius-md)', background:p.muted, display:'flex', alignItems:'center', justifyContent:'center' }}>
+                        <PlatformIcon platform={plat} size={13}/>
+                      </div>
+                      <span style={{ fontWeight:600, fontSize:'var(--text-md)' }}>{p.name}</span>
+                    </div>
+                    <span style={{ fontSize:'var(--text-xs)', fontFamily:'var(--font-mono)', color:'var(--color-success-500)', fontWeight:600 }}>+{pct}%</span>
+                  </div>
+                  <div style={{ fontFamily:'var(--font-mono)', fontSize:'var(--text-3xl)', fontWeight:700, color:'var(--color-text-primary)', marginBottom:4 }}>{fmtNum(MOCK.followers[plat])}</div>
+                  <div style={{ fontSize:'var(--text-sm)', color:'var(--color-success-500)', fontFamily:'var(--font-mono)', marginBottom:10 }}>+{fmtNum(MOCK.followerGrowth7d[plat])} em 7d</div>
+                  <Sparkline data={MOCK.growthData[plat].map(d => d.value)} color={p.color} height={32} width={160}/>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── MAIN APP ─── */
+function App() {
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "sidebarExpanded": true,
+    "isLive": true,
+    "planTier": "Pro"
+  }/*EDITMODE-END*/;
+
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const sidebarExpanded = tweaks.sidebarExpanded;
+  const isLive = tweaks.isLive;
+
+  const [activeScreen, setActiveScreen] = useState('dashboard');
+  const [lastUpdate, setLastUpdate] = useState('agora mesmo');
+  const connectedPlatforms = ['twitch','youtube','kick','trovo'];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const secs = Math.floor(Math.random() * 58) + 2;
+      setLastUpdate(`há ${secs}s`);
+    }, 15000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const screenTitles = { dashboard:'Dashboard', live:'Live', crescimento:'Crescimento' };
+
+  return (
+    <div style={{ display:'flex', height:'100vh', overflow:'hidden', background:'var(--color-bg-base)' }}>
+      <Sidebar
+        expanded={sidebarExpanded}
+        onToggle={() => setTweak('sidebarExpanded', !sidebarExpanded)}
+        activeScreen={activeScreen}
+        onNavigate={setActiveScreen}
+        connectedPlatforms={connectedPlatforms}
+      />
+      <div style={{ flex:1, display:'flex', flexDirection:'column', overflow:'hidden', minWidth:0 }}>
+        <Topbar
+          title={screenTitles[activeScreen]}
+          lastUpdate={lastUpdate}
+          onRefresh={() => setLastUpdate('agora mesmo')}
+          isLive={isLive && activeScreen === 'live'}
+        />
+        {activeScreen === 'dashboard' && <DashboardScreen isLive={isLive} connectedPlatforms={connectedPlatforms}/>}
+        {activeScreen === 'live' && <LiveScreen isLive={isLive} connectedPlatforms={connectedPlatforms}/>}
+        {activeScreen === 'crescimento' && <CrescimentoScreen connectedPlatforms={connectedPlatforms}/>}
+      </div>
+
+      <TweaksPanel>
+        <TweakSection title="Layout">
+          <TweakToggle label="Sidebar expandida" value={sidebarExpanded} onChange={v => setTweak('sidebarExpanded', v)}/>
+        </TweakSection>
+        <TweakSection title="Estado da Live">
+          <TweakToggle label="Live em andamento" value={isLive} onChange={v => setTweak('isLive', v)}/>
+        </TweakSection>
+        <TweakSection title="Plano">
+          <TweakRadio label="Tier" value={tweaks.planTier} options={['Free','Pro','Agency']} onChange={v => setTweak('planTier', v)}/>
+        </TweakSection>
+      </TweaksPanel>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script>
+</body>
+</html>

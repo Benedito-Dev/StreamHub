@@ -1,1 +1,1 @@
-// Public API for the live feature
+export { LiveScreen } from './components/LiveScreen'
